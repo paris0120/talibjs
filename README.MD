@@ -1,5 +1,5 @@
 #TALib js
-This library is a replication of TA-Lib with Typescript. This library will include with all functions from the original TA-Lib (https://www.ta-lib.org/function.html) and more. Compared the other wrapped version of TA-Lib, this library implimented with pure Typescript.
+This library is a replication of TA-Lib with Typescript. This library will include with all functions from the original TA-Lib (https://www.ta-lib.org/function.html) and more. Compared with the other wrapped version of TA-Lib, this library implimented with pure Typescript, so it can be used at both front and back ends.
 
 ## Quick Guide
 
