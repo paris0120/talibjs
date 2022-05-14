@@ -5,7 +5,7 @@ This library is a replication of TA-Lib with Typescript. This library will inclu
 
 ### Install
 
-npm install talibjs
+npm install @zero0120/talib.js
 
 ### Import
 import { TALib } from 'talibjs';
