@@ -1,5 +1,6 @@
 export class TALib {
-    public static sma(value: (number|null)[], period: number): {sma:(number|null)[]} {
+    public static sma(value: (number|null)[]|undefined, period: number): Map<string,(number|null)[]> {
+        if(value==undefined) throw Error("Missing value.");
         if(period<=0) throw Error("Period must be a positive integer.");
         let sum = 0;
         let start = 0;
@@ -25,11 +26,13 @@ export class TALib {
                 }
             }
         }
-        return {sma:sma};
+        return new Map([["sma",sma]]);
     }
 
 
-    public static wsma(value: (number|null)[], weight: (number|null)[], period: number): {wsma:(number|null)[]} {
+    public static wsma(value: (number|null)[]|undefined, weight: (number|null)[]|undefined, period: number): Map<string,(number|null)[]> {
+        if(value==undefined) throw Error("Missing value.");
+        if(weight==undefined) throw Error("Missing weight.");
         if(weight.length!=value.length) throw Error("Value and weight must have same length.");
         if(period<=0) throw Error("Period must be a positive integer.");
         let sum = 0;
@@ -61,12 +64,14 @@ export class TALib {
                 }
             }
         }
-        return {wsma:sma};
+
+        return new Map([["wsma",sma]]);
     }
 
 
-    public static wema(value: (number|null)[], weight: number[], period: number, smoothing: number): { wema:(number|null)[]} {
-        let outputIndex = [];
+    public static wema(value: (number|null)[]|undefined, weight: number[]|undefined, period: number, smoothing: number): Map<string,(number|null)[]> {
+        if(value==undefined) throw Error("Missing value.");
+        if(weight==undefined) throw Error("Missing weight.");
         if(weight.length!=value.length) throw Error("Value and weight must have same length.");
         if(period<=0) throw Error("Period must be a positive number.");
         let sum = 0;
@@ -81,12 +86,12 @@ export class TALib {
                 ema.push(sum/wsum);
             }
         }
-        return {wema:ema};
+        return new Map([["wema",ema]]);
     }
 
 
-    public static ema(value: (number|null)[], period: number, smoothing: number): {ema:(number|null)[]} {
-        let outputIndex = [];
+    public static ema(value: (number|null)[]|undefined, period: number, smoothing: number): Map<string,(number|null)[]> {
+        if(value==undefined) throw Error("Missing value.");
         if(period<=0) throw Error("Period must be a positive number.");
         let sum = 0;
         let factor = smoothing/(1+period);
@@ -99,74 +104,136 @@ export class TALib {
                 ema.push(sum/period);
             }
         }
-        return {ema:ema};
+        return new Map([["ema",ema]]);
     }
 
 
-    public static minus(value1:(number|null)[], value2:(number|null)[]): { minus:(number|null)[] } {
-        if(value1.length!=value2.length) throw Error("Two values have different lengths.");
+
+    public static minus(value1:(number|null)[]|undefined, value2:(number|null)[]|undefined|number): Map<string,(number|null)[]> {
+        if(value1==undefined) throw Error("Missing value1.");
+        if(value2==undefined) throw Error("Missing value2.");
         let output:(number|null)[] = [];
-        for(let i = 0;i<value1.length;i++) {
-            if(value2[i]==null || value2[i] == null) output.push(null);
-            else { // @ts-ignore
-                output.push(value1[i]-value2[i]);
+        if(typeof value2=='number') {
+            for(let i = 0;i<value1.length;i++) {
+                if(value1[i]==null) output.push(null);
+                else { // @ts-ignore
+                    output.push(value1[i]-value2);
+                }
             }
         }
-
-        return {minus:output};
-    }
-
-
-    public static plus(value1:(number|null)[], value2:(number|null)[]): { plus:(number|null)[] } {
-        if(value1.length!=value2.length) throw Error("Two values have different lengths.");
-        let output:(number|null)[] = [];
-        for(let i = 0;i<value1.length;i++) {
-            if(value2[i]==null || value2[i] == null) output.push(null);
-            else { // @ts-ignore
-                output.push(value1[i]+value2[i]);
+        else {
+            if(value1.length!=value2.length) throw Error("Two values have different lengths.");
+            for(let i = 0;i<value1.length;i++) {
+                if(value1[i]==null || value2[i] == null) output.push(null);
+                else { // @ts-ignore
+                    output.push(value1[i]-value2[i]);
+                }
             }
         }
-        return {plus:output};
+        return new Map([["minus",output]]);
     }
 
-    public static divide(value1:(number|null)[], value2:(number|null)[]): { divide:(number|null)[] } {
-        if(value1.length!=value2.length) throw Error("Two values have different lengths.");
+    public static plus(value1:(number|null)[]|undefined, value2:(number|null)[]|undefined|number): Map<string,(number|null)[]> {
+        if(value1==undefined) throw Error("Missing value1.");
+        if(value2==undefined) throw Error("Missing value2.");
         let output:(number|null)[] = [];
-        for(let i = 0;i<value1.length;i++) {
-            if(value2[i]==null || value2[i] == null) output.push(null);
-            else { // @ts-ignore
-                output.push(value1[i]/value2[i]);
+        if(typeof value2=='number') {
+            for(let i = 0;i<value1.length;i++) {
+                if(value1[i]==null) output.push(null);
+                else { // @ts-ignore
+                    output.push(value1[i]+value2);
+                }
             }
         }
-        return {divide:output};
-    }
-
-    public static mod(value1:(number|null)[], value2:(number|null)[]): { mod:(number|null)[] } {
-        if(value1.length!=value2.length) throw Error("Two values have different lengths.");
-        let output:(number|null)[] = [];
-        for(let i = 0;i<value1.length;i++) {
-            if(value2[i]==null || value2[i] == null) output.push(null);
-            else { // @ts-ignore
-                output.push(value1[i]%value2[i]);
+        else {
+            if(value1.length!=value2.length) throw Error("Two values have different lengths.");
+            for(let i = 0;i<value1.length;i++) {
+                if(value1[i]==null || value2[i] == null) output.push(null);
+                else { // @ts-ignore
+                    output.push(value1[i]+value2[i]);
+                }
             }
         }
-        return {mod:output};
+        return new Map([["plus",output]]);
     }
 
-    public static multiply(value1:(number|null)[], value2:(number|null)[]): { multiply:(number|null)[] } {
-        if(value1.length!=value2.length) throw Error("Two values have different lengths.");
+
+    public static modulo(value1:(number|null)[]|undefined, value2:(number|null)[]|undefined|number): Map<string,(number|null)[]> {
+        if(value1==undefined) throw Error("Missing value1.");
+        if(value2==undefined) throw Error("Missing value2.");
         let output:(number|null)[] = [];
-        for(let i = 0;i<value1.length;i++) {
-            if(value2[i]==null || value2[i] == null) output.push(null);
-            else { // @ts-ignore
-                output.push(value1[i]*value2[i]);
+        if(typeof value2=='number') {
+            for(let i = 0;i<value1.length;i++) {
+                if(value1[i]==null) output.push(null);
+                else { // @ts-ignore
+                    output.push(value1[i]%value2);
+                }
             }
         }
-        return {multiply:output};
+        else {
+            if(value1.length!=value2.length) throw Error("Two values have different lengths.");
+            for(let i = 0;i<value1.length;i++) {
+                if(value1[i]==null || value2[i] == null) output.push(null);
+                else { // @ts-ignore
+                    output.push(value1[i]%value2[i]);
+                }
+            }
+        }
+        return new Map([["modulo",output]]);
     }
 
-    public static stddev(value: (number|null)[], average: (number|null)[], period: number): {stddev:(number|null)[]} {
-        let outputIndex = [];
+    public static multiply(value1:(number|null)[]|undefined, value2:(number|null)[]|undefined|number): Map<string,(number|null)[]> {
+        if(value1==undefined) throw Error("Missing value1.");
+        if(value2==undefined) throw Error("Missing value2.");
+        let output:(number|null)[] = [];
+        if(typeof value2=='number') {
+            for(let i = 0;i<value1.length;i++) {
+                if(value1[i]==null) output.push(null);
+                else { // @ts-ignore
+                    output.push(value1[i]*value2);
+                }
+            }
+        }
+        else {
+            if(value1.length!=value2.length) throw Error("Two values have different lengths.");
+            for(let i = 0;i<value1.length;i++) {
+                if(value1[i]==null || value2[i] == null) output.push(null);
+                else { // @ts-ignore
+                    output.push(value1[i]*value2[i]);
+                }
+            }
+        }
+        return new Map([["multiply",output]]);
+    }
+
+
+    public static divide(value1:(number|null)[]|undefined, value2:(number|null)[]|undefined|number): Map<string,(number|null)[]> {
+        if(value1==undefined) throw Error("Missing value1.");
+        if(value2==undefined) throw Error("Missing value2.");
+        let output:(number|null)[] = [];
+        if(typeof value2=='number') {
+            for(let i = 0;i<value1.length;i++) {
+                if(value1[i]==null) output.push(null);
+                else { // @ts-ignore
+                    output.push(value1[i]/value2);
+                }
+            }
+        }
+        else {
+            if(value1.length!=value2.length) throw Error("Two values have different lengths.");
+            for(let i = 0;i<value1.length;i++) {
+                if(value1[i]==null || value2[i] == null) output.push(null);
+                else { // @ts-ignore
+                    output.push(value1[i]/value2[i]);
+                }
+            }
+        }
+        return new Map([["divide",output]]);
+    }
+
+    public static stddev(value: (number|null)[]|undefined, average: (number|null)[]|undefined, period: number): Map<string,(number|null)[]> {
+        if(value==undefined) throw Error("Missing value.");
+        if(average==undefined) throw Error("Missing average.");
         if(value.length!=average.length) throw Error("Value and average must have the same length.");
         if(period<=0) throw Error("Period must be a positive integer.");
         let std:(number|null)[] = [];
@@ -184,23 +251,48 @@ export class TALib {
                 std.push(sum/period);
             }
         }
-        return {stddev:std};
+        return new Map([["stddev",std]]);
     }
 
     public static macdDefault = {fastPeriod:12, slowPeriod:26, signalPeriod:9};
-    public static macd(index: any[], close: (number|null)[], fastPeriod: number, slowPeriod: number, signalPeriod: number): { macd:(number|null)[], signal:(number|null)[], hist:(number|null)[]} {
-        if(index!=null && index.length!=close.length) throw Error("Incompatible index");
+    public static macd(close: (number|null)[]|undefined, fastPeriod: number, slowPeriod: number, signalPeriod: number): Map<string,(number|null)[]> {
+        if(close==undefined) throw Error("Missing close.");
         if(fastPeriod<=0) throw Error("Fast period must be a positive integer.");
         if(slowPeriod<=0) throw Error("Slow period must be a positive integer.");
         if(signalPeriod<=0) throw Error("Signal period must be a positive integer.");
+        if(slowPeriod<=fastPeriod) throw Error("Slow period must be longer than fast period.");
         let fast = this.ema(close, fastPeriod, 2);
         let slow = this.ema(close, slowPeriod, 2);
 
-        let macd = this.minus(fast.ema, slow.ema).minus;
-        let signal = this.ema(macd, signalPeriod, 2).ema;
-        let hist = this.minus(macd, signal).minus;
+        let macd = this.minus(fast.get('ema'), slow.get('ema')).get('minus');
+        let signal = this.ema(macd, signalPeriod, 2).get('ema');
+        let hist = this.minus(macd, signal).get('minus');
 
-        return {macd:macd,signal:signal,hist:hist};
+        // @ts-ignore
+        return new Map([
+            ["macd",macd],
+            ["macd_signal",signal],
+            ["macd_hist",hist],
+        ]);
+    }
+
+
+    public static bbandsDefault = {period:5, bandWidth:2};
+    public static bbands(close: (number|null)[]|undefined, period: number, bandWidth: number): Map<string,(number|null)[]> {
+        if(close==undefined) throw Error("Missing close.");
+        if(period<=0) throw Error("Fast period must be a positive integer.");
+        let sma = this.sma(close, period).get('sma');
+        let dev = this.stddev(close, sma, period).get('stddev');
+        dev = this.multiply(dev, bandWidth).get('multiply');
+        let upper = this.plus(sma, dev).get('plus');
+        let lower = this.minus(sma, dev).get('minus');
+
+        // @ts-ignore
+        return new Map([
+            ["bbands_upper",upper],
+            ["bbands_sma",sma],
+            ["bbands_lower",lower],
+        ]);
     }
 
 
