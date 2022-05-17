@@ -308,9 +308,9 @@ WMA                 Weighted Moving Average
 
 ### Extra function list:
 
-WEMA                 Weighted Exponential Moving Average
+WEMA:                 Weighted Exponential Moving Average
 
-WSMA                 Weighted Moving Average
+WSMA:                 Weighted Moving Average
 
 Minus
 
@@ -320,4 +320,8 @@ Multiply
 
 Divide
 
-Mod
+Modulo
+
+VWAP: Volume-Weighted Average Price
+
+VWEAP: Volume-Weighted Exponential Average Price

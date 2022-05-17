@@ -69,7 +69,7 @@ export class TALib {
     }
 
 
-    public static wema(value: (number|null)[]|undefined, weight: number[]|undefined, period: number, smoothing: number): Map<string,(number|null)[]> {
+    public static wema(value: (number|null)[]|undefined, weight: (number|null)[]|undefined, period: number, smoothing: number): Map<string,(number|null)[]> {
         if(value==undefined) throw Error("Missing value.");
         if(weight==undefined) throw Error("Missing weight.");
         if(weight.length!=value.length) throw Error("Value and weight must have same length.");
@@ -79,9 +79,11 @@ export class TALib {
         let factor = smoothing/(1+period);
         let ema:(number|null)[] = [];
         for(let i=0;i<value.length;i++) {
-            if(value[i]!=null) {
+            if(value[i]==null || weight[i]==null) ema.push(null);
+            else {
                 // @ts-ignore
                 sum=value[i]*weight[i]*factor + sum * (1-factor);
+                // @ts-ignore
                 wsum=weight[i]*factor + wsum * (1-factor);
                 ema.push(sum/wsum);
             }
@@ -295,6 +297,25 @@ export class TALib {
         ]);
     }
 
+    /**
+     * Volume-Weighted Average Price
+     * @param close
+     * @param volume
+     * @param period
+     */
+    public static vwap(close: (number|null)[]|undefined, volume: (number|null)[]|undefined, period: number) {
+        return this.wsma(close, volume, period);
+    }
+
+    /**
+     * Volume-Weighted Exponential Average Price
+     * @param close
+     * @param volume
+     * @param period
+     */
+    public static vweap(close: (number|null)[]|undefined, volume: (number|null)[]|undefined, period: number) {
+        return this.wema(close, volume, period, 2);
+    }
 
 }
 
