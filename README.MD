@@ -33,7 +33,7 @@ let hist = output.hist;
  
 ## Function List:
 
-### TA-Lib function list (+: implimented): 
+### TA-Lib function list (Partially implemented): 
 
 AD: Chaikin A/D Line
 
