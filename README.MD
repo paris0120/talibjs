@@ -35,11 +35,11 @@ let hist = output.hist;
 
 ### TA-Lib function list (+: implimented): 
 
-AD                  Chaikin A/D Line
+AD: Chaikin A/D Line
 
-ADOSC               Chaikin A/D 
+ADOSC: Chaikin A/D 
 
-ADX                 Average Directional Movement Index
+ADX: Average Directional Movement Index
 
 ADXR                Average Directional Movement Index Rating
 
@@ -49,11 +49,11 @@ AROON               Aroon
 
 AROONOSC            Aroon Oscillator
 
-ATR                 Average True Range
+ATR: Average True Range
 
 AVGPRICE            Average Price
 
-BBANDS              Bollinger Bands
+BBANDS: Bollinger Bands
 
 BETA                Beta
 
@@ -190,7 +190,7 @@ DEMA                Double Exponential Moving Average
 
 DX                  Directional Movement Index
 
-+EMA                 Exponential Moving Average
+EMA: Exponential Moving Average
 
 HT_DCPERIOD         Hilbert Transform - Dominant Cycle Period
 
@@ -214,7 +214,7 @@ LINEARREG_INTERCEPT Linear Regression Intercept
 
 LINEARREG_SLOPE     Linear Regression Slope
 
-+MACD                Moving Average Convergence/Divergence
+MACD: Moving Average Convergence/Divergence
 
 MAMA                MESA Adaptive Moving Average
 
@@ -268,9 +268,9 @@ SAR                 Parabolic SAR
 
 SAREXT              Parabolic SAR - Extended
 
-+SMA                 Simple Moving Average
+SMA: Simple Moving Average
 
-STDDEV              Standard Deviation
+STDDEV: Standard Deviation
 
 STOCH               Stochastic
 
@@ -308,9 +308,7 @@ WMA                 Weighted Moving Average
 
 ### Extra function list:
 
-WEMA:                 Weighted Exponential Moving Average
-
-WSMA:                 Weighted Moving Average
+#### Basic operators:
 
 Minus
 
@@ -322,6 +320,20 @@ Divide
 
 Modulo
 
+#### Indicators:
+
+DI: Directional Index
+
+DM: Directional Movement
+
+MMA: Modified moving average
+
+TR: True Range 
+
 VWAP: Volume-Weighted Average Price
 
 VWEAP: Volume-Weighted Exponential Average Price
+
+WEMA: Weighted Exponential Moving Average
+
+WSMA: Weighted Moving Average
