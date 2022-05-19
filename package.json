@@ -1,6 +1,6 @@
 {
   "name": "@paris0120/talib.js",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "description": "",
   "main": "index.ts",
   "scripts": {

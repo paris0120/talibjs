@@ -278,7 +278,7 @@ export class TALib {
         return new Map([["stddev", std]]);
     }
 
-    public static macdDefault = {fastPeriod: 12, slowPeriod: 26, signalPeriod: 9};
+    public static macdDefault = new Map([["fastPeriod", 12],["slowPeriod", 26],["signalPeriod", 9]]);
 
     public static macd(close: (number | null)[] | undefined, fastPeriod: number, slowPeriod: number, signalPeriod: number): Map<string, (number | null)[]> {
         if (close == undefined) throw Error("Missing close.");
@@ -301,9 +301,27 @@ export class TALib {
         ]);
     }
 
+    public avgPrice(open: (number | null)[] | undefined, high: (number | null)[] | undefined, low: (number | null)[] | undefined, close: (number | null)[] | undefined) {
+        if (open == undefined) throw Error("Missing open.");
+        if (high == undefined) throw Error("Missing high.");
+        if (low == undefined) throw Error("Missing low.");
+        if (close == undefined) throw Error("Missing close.");
+        if (open.length != high.length) throw Error("Open and high must have the same length.");
+        if (open.length != low.length) throw Error("Open and low must have the same length.");
+        if (open.length != close.length) throw Error("Open and close must have the same length.");
+        let avgPrice: (number | null)[] = [];
+        for(let i = 0; i<open.length; i++) {
+            if(open[i]==null || high[i]==null || low[i]==null || close[i]==null) avgPrice.push(null);
+            else { // @ts-ignore
+                avgPrice.push((open[i] + high[i] + low[i] + close[i])/4);
+            }
+        }
+        return new Map([["avgPrice", avgPrice]]);
 
-    public static bbandsDefault = {period: 5, bandWidth: 2};
+    }
 
+
+    public static bbandsDefault = new Map([["period", 5],["bandWidth", 2]]);
     public static bbands(close: (number | null)[] | undefined, period: number, bandWidth: number): Map<string, (number | null)[]> {
         if (close == undefined) throw Error("Missing close.");
         if (period <= 0) throw Error("Fast period must be a positive integer.");
@@ -320,6 +338,62 @@ export class TALib {
             ["bbands_lower", lower],
         ]);
     }
+
+
+    /**
+     * Typical Price
+     * @param high
+     * @param low
+     * @param close
+     * @constructor
+     */
+    public TypPrice(high: (number | null)[] | undefined, low: (number | null)[] | undefined, close: (number | null)[] | undefined) {
+        if (high == undefined) throw Error("Missing high.");
+        if (low == undefined) throw Error("Missing low.");
+        if (close == undefined) throw Error("Missing close.");
+        if (high.length != low.length) throw Error("High and low must have the same length.");
+        if (high.length != close.length) throw Error("High and close must have the same length.");
+        let avgPrice: (number | null)[] = [];
+        for(let i = 0; i<open.length; i++) {
+            if(high[i]==null || low[i]==null || close[i]==null) avgPrice.push(null);
+            else { // @ts-ignore
+                avgPrice.push((high[i] + low[i] + close[i])/3);
+            }
+        }
+        return new Map([["TypPrice", avgPrice]]);
+
+    }
+
+
+    /**
+     * Weighted Close Price
+     * @param high
+     * @param low
+     * @param close
+     */
+    public wClPrice(high: (number | null)[] | undefined, low: (number | null)[] | undefined, close: (number | null)[] | undefined) {
+        if (high == undefined) throw Error("Missing high.");
+        if (low == undefined) throw Error("Missing low.");
+        if (close == undefined) throw Error("Missing close.");
+        if (high.length != low.length) throw Error("High and low must have the same length.");
+        if (high.length != close.length) throw Error("High and close must have the same length.");
+        let avgPrice: (number | null)[] = [];
+        for(let i = 0; i<open.length; i++) {
+            if(high[i]==null || low[i]==null || close[i]==null) avgPrice.push(null);
+            else { // @ts-ignore
+                avgPrice.push((high[i] + low[i] + close[i]*2)/4);
+            }
+        }
+        return new Map([["wClPrice", avgPrice]]);
+
+    }
+
+
+
+
+
+
+
 
     /**
      * Volume-Weighted Average Price
@@ -386,9 +460,7 @@ export class TALib {
         // @ts-ignore
         return new Map([["atr", this.sma(tr, period).get('sma')]]);
     }
-
-    public static atrDefault = {period: 14};
-
+    public static atrDefault = new Map([["period", 14]]);
 
     /**
      * Chaikin A/D Line
@@ -430,11 +502,10 @@ export class TALib {
     public static adOsc(high: (number | null)[] | undefined, low: (number | null)[] | undefined, close: (number | null)[] | undefined, volume: (number | null)[] | undefined, fastPeriod: number, slowPeriod: number): Map<string, (number | null)[]> {
         let ad = this.ad(high, low, close, volume).get("ad");
         // @ts-ignore
-        return new Map([["adOsc", this.ema(ad, fastPeriod).get("ema") = this.ema(ad, slowPeriod).get("ema")]]);
+        return new Map([["adOsc", this.ema(ad, fastPeriod).get("ema") - this.ema(ad, slowPeriod).get("ema")]]);
     }
 
-    public static adOscDefault = {fastPeriod: 3, slowPeriod: 10};
-
+    public static adOscDefault = new Map([["fastPeriod", 3], ["slowPeriod", 10]]);
 
     /**
      * Directional Movement
@@ -493,7 +564,7 @@ export class TALib {
         return new Map([["pdi", pdi], ["ndi", ndi]]);
     }
 
-    public static diDefault = {period: 14};
+    public static diDefault = new Map([["period", 14]]);
 
     /**
      * Directional Index
@@ -523,7 +594,7 @@ export class TALib {
         }
         return new Map([["dx", dx]]);
     }
-    public static dxDefault = {period: 14};
+    public static dxDefault = new Map([["period", 14]]);
 
     /**
      * Average Directional Movement Index
@@ -537,6 +608,7 @@ export class TALib {
         // @ts-ignore
         return new Map([["adx", this.mma(dx, period).get('mma')]]);
     }
-    public static adxDefault = {period: 14};
+     public static adxDefault = new Map([["period", 14]]);
+
 }
 

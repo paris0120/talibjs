@@ -1,5 +1,5 @@
-#TALib js
-This library is a replication of TA-Lib with Typescript. This library will include with all functions from the original TA-Lib (https://www.ta-lib.org/function.html) and more. Compared with the other wrapped version of TA-Lib, this library implimented with pure Typescript, so it can be used at both front and back ends.
+#TALib.js
+This library is a replication of TA-Lib with Typescript. This library will include with all functions from the original TA-Lib (https://www.ta-lib.org/function.html) and more. Compared with the other wrapped versions of TA-Lib, this library is implemented with pure Typescript, so it can be used at both front and back ends.
 
 ## Quick Guide
 
@@ -14,10 +14,10 @@ import { TALib } from 'talibjs';
 The input columns must be an array of numbers or null. All the time frame with null input values will be skipped. 
 
 ### Output
-The output is an object with all the output field(s).
+The output is a map with all the output field(s).
 
 ### Default Parameters
-For some functions, the default parameters can be found from TALib.[function name]Default.
+For some functions, the default parameters can be found from TALib.[function name]Default. For example for MACD the default values are stored in TALib.macdDefault
 
 ### Example
 import { TALib } from 'talibjs';
@@ -26,7 +26,6 @@ close = [your close price array];
 
 //For MACD with the default parameters
 output = TALib.macd(index, close, TALib.macdDefault.fastPeriod, TALib.macdDefault.slowPeriod, TALib.macdDefault.signalPeriod);
- 
 let macd = output.macd;
 let signal = output.signal;
 let hist = output.hist;
@@ -51,7 +50,7 @@ AROONOSC            Aroon Oscillator
 
 ATR: Average True Range
 
-AVGPRICE            Average Price
+AVGPRICE: Average Price
 
 BBANDS: Bollinger Bands
 
@@ -118,6 +117,7 @@ CDLHARAMICROSS      Harami Cross Pattern
 CDLHIGHWAVE         High-Wave Candle
 
 CDLHIKKAKE          Hikkake Pattern
+
 CDLHIKKAKEMOD       Modified Hikkake Pattern
 
 CDLHOMINGPIGEON     Homing Pigeon
@@ -188,7 +188,7 @@ CORREL              Pearson's Correlation Coefficient (r)
 
 DEMA                Double Exponential Moving Average
 
-DX                  Directional Movement Index
+DX: Directional Movement Index
 
 EMA: Exponential Moving Average
 
@@ -238,9 +238,9 @@ MINMAX              Lowest and highest values over a specified period
 
 MINMAXINDEX         Indexes of lowest and highest values over a specified period
 
-MINUS_DI            Minus Directional Indicator
+MINUS_DI: Minus Directional Indicator (included in DI as ndi)
 
-MINUS_DM            Minus Directional Movement
+MINUS_DM: Minus Directional Movement (included in DM as ndm)
 
 MOM                 Momentum
 
@@ -248,9 +248,9 @@ NATR                Normalized Average True Range
 
 OBV                 On Balance Volume
 
-PLUS_DI             Plus Directional Indicator
+PLUS_DI: Plus Directional Indicator (included in DI as pdi)
 
-PLUS_DM             Plus Directional Movement
+PLUS_DM: Plus Directional Movement (included in Dm as pdm)
 
 PPO                 Percentage Price Oscillator
 
@@ -292,13 +292,13 @@ TRIX                1-day Rate-Of-Change (ROC) of a Triple Smooth EMA
 
 TSF                 Time Series Forecast
 
-TYPPRICE            Typical Price
+TYPPRICE: Typical Price
 
 ULTOSC              Ultimate Oscillator
 
 VAR                 Variance
 
-WCLPRICE            Weighted Close Price
+WCLPRICE: Weighted Close Price
 
 WILLR               Williams' %R
 
