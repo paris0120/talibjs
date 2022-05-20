@@ -218,9 +218,9 @@ MACD: Moving Average Convergence/Divergence
 
 MAMA                MESA Adaptive Moving Average
 
-MAX                 Highest value over a specified period
+MAX: Highest value over a specified period
 
-MAXINDEX            Index of highest value over a specified period
+MAXINDEX: Index of highest value over a specified period
 
 MEDPRICE            Median Price
 
@@ -230,9 +230,9 @@ MIDPOINT            MidPoint over period
 
 MIDPRICE            Midpoint Price over period
 
-MIN                 Lowest value over a specified period
+MIN: Lowest value over a specified period
 
-MININDEX            Index of lowest value over a specified period
+MININDEX: Index of lowest value over a specified period
 
 MINMAX              Lowest and highest values over a specified period
 

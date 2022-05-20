@@ -676,6 +676,11 @@ export class TALib {
 
     public static apoDefault = new Map([["fastPeriod", 12],["slowPeriod", 26],["signalPeriod", 9]]);
 
+    /**
+     * Highest value over a specified period
+     * @param value
+     * @param period
+     */
     public static max(value: (number | null)[] | undefined, period:number): Map<string, (number | null)[]> {
         if(value==undefined) throw Error("Value is missing.");
         let c = 0;
@@ -699,6 +704,47 @@ export class TALib {
         }
         return new Map([["max", max]]);
     }
+
+
+    /**
+     * Index of highest value over a specified period
+     * @param value
+     * @param period
+     */
+    public static maxIndex(value: (number | null)[] | undefined, period:number): Map<string, (number | null)[]> {
+        if(value==undefined) throw Error("Value is missing.");
+        let c = 0;
+        let start = 0;
+        let maxIndex: (number | null)[] = [];
+        for(let i=0; i< value.length; i++) {
+            if(value[i] == null) maxIndex.push(null);
+            else if(c<period) c++
+            else {
+                while(value[start] == null) start++;
+                let m = value[i];
+                let index = i;
+                for (let j=start+1;j<i;j++) {
+                    if(value[j]!=null) {
+                        // @ts-ignore
+                        if(value[j]>m) {
+                            m = value[j]
+                            index = j;
+                        }
+                    }
+                }
+                maxIndex.push(index);
+                start++;
+            }
+        }
+        return new Map([["maxIndex", maxIndex]]);
+    }
+
+
+    /**
+     * Lowest value over a specified period
+     * @param value
+     * @param period
+     */
     public static min(value: (number | null)[] | undefined, period:number): Map<string, (number | null)[]> {
         if(value==undefined) throw Error("Value is missing.");
         let c = 0;
@@ -721,6 +767,40 @@ export class TALib {
             }
         }
         return new Map([["min", min]]);
+    }
+
+
+    /**
+     * Index of lowest value over a specified period
+     * @param value
+     * @param period
+     */
+    public static minIndex(value: (number | null)[] | undefined, period:number): Map<string, (number | null)[]> {
+        if(value==undefined) throw Error("Value is missing.");
+        let c = 0;
+        let start = 0;
+        let minIndex: (number | null)[] = [];
+        for(let i=0; i< value.length; i++) {
+            if(value[i] == null) minIndex.push(null);
+            else if(c<period) c++
+            else {
+                while(value[start] == null) start++;
+                let m = value[i];
+                let index = i;
+                for (let j=start+1;j<i;j++) {
+                    if(value[j]!=null) {
+                        // @ts-ignore
+                        if(value[j]<m) {
+                            m = value[j];
+                            index = j;
+                        }
+                    }
+                }
+                minIndex.push(index);
+                start++;
+            }
+        }
+        return new Map([["minIndex", minIndex]]);
     }
 
 }
