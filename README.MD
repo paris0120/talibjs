@@ -40,9 +40,9 @@ ADOSC: Chaikin A/D
 
 ADX: Average Directional Movement Index
 
-ADXR                Average Directional Movement Index Rating
+ADXR: Average Directional Movement Index Rating
 
-APO                 Absolute Price Oscillator
+APO: Absolute Price Oscillator
 
 AROON               Aroon
 

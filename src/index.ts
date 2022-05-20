@@ -608,7 +608,120 @@ export class TALib {
         // @ts-ignore
         return new Map([["adx", this.mma(dx, period).get('mma')]]);
     }
-     public static adxDefault = new Map([["period", 14]]);
+    public static adxDefault = new Map([["period", 14]]);
+
+
+    /**
+     * Average Directional Movement Index Rating
+     * https://www.daytrading.com/adx-adxr
+     * @param high
+     * @param low
+     * @param close
+     * @param period
+     * @param adxPeriod
+     */
+    public static adxr(high: (number | null)[] | undefined, low: (number | null)[] | undefined, close: (number | null)[] | undefined, period: number, adxPeriod: number): Map<string, (number | null)[]> {
+        if(period<0) throw Error("Period must be greater than 0.")
+        let adx = this.adx(high, low, close, adxPeriod).get('adx');
+        let i = 0;
+        let c = 0;
+        let start = 0;
+        let adxr: (number | null)[] = [];
+        // @ts-ignore
+        while(i<adx.length) {
+            // @ts-ignore
+            if(adx[i] == null) {
+                adxr.push(null)
+            }
+            else if(c<period) {
+                adxr.push(null);
+                c++;
+            }
+            else {
+                // @ts-ignore
+                while(adx[start]==null) start++;
+                // @ts-ignore
+                adxr.push((adx[i]+adx[start])/2);
+                start++;
+            }
+
+        }
+
+        // @ts-ignore
+        return new Map([["adxr", adxr]]);
+    }
+    public static adxrDefault = new Map([["period", 10],["adxPeriod", 14]]);
+
+
+
+    /**
+     * Absolute Price Oscillator
+     * @param close
+     * @param fastPeriod
+     * @param slowPeriod
+     */
+    public static apo(close: (number | null)[] | undefined, fastPeriod: number, slowPeriod: number): Map<string, (number | null)[]> {
+        if (close == undefined) throw Error("Missing close.");
+        if (fastPeriod <= 0) throw Error("Fast period must be a positive integer.");
+        if (slowPeriod <= 0) throw Error("Slow period must be a positive integer.");
+        if (slowPeriod <= fastPeriod) throw Error("Slow period must be longer than fast period.");
+        let fast = this.ema(close, fastPeriod, 2).get('ema');
+        let slow = this.ema(close, slowPeriod, 2).get('ema');
+
+        let apo = this.minus(slow, fast).get('minus');
+
+        // @ts-ignore
+        return new Map([["apo", apo]]);
+    }
+
+    public static apoDefault = new Map([["fastPeriod", 12],["slowPeriod", 26],["signalPeriod", 9]]);
+
+    public static max(value: (number | null)[] | undefined, period:number): Map<string, (number | null)[]> {
+        if(value==undefined) throw Error("Value is missing.");
+        let c = 0;
+        let start = 0;
+        let max: (number | null)[] = [];
+        for(let i=0; i< value.length; i++) {
+            if(value[i] == null) max.push(null);
+            else if(c<period) c++
+            else {
+                while(value[start] == null) start++;
+                let m = value[i];
+                for (let j=start+1;j<i;j++) {
+                    if(value[j]!=null) {
+                        // @ts-ignore
+                        if(value[j]>m) m = value[j];
+                    }
+                }
+                max.push(m);
+                start++;
+            }
+        }
+        return new Map([["max", max]]);
+    }
+    public static min(value: (number | null)[] | undefined, period:number): Map<string, (number | null)[]> {
+        if(value==undefined) throw Error("Value is missing.");
+        let c = 0;
+        let start = 0;
+        let min: (number | null)[] = [];
+        for(let i=0; i< value.length; i++) {
+            if(value[i] == null) min.push(null);
+            else if(c<period) c++
+            else {
+                while(value[start] == null) start++;
+                let m = value[i];
+                for (let j=start+1;j<i;j++) {
+                    if(value[j]!=null) {
+                        // @ts-ignore
+                        if(value[j]<m) m = value[j];
+                    }
+                }
+                min.push(m);
+                start++;
+            }
+        }
+        return new Map([["min", min]]);
+    }
 
 }
 
