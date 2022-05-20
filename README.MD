@@ -25,10 +25,15 @@ import { TALib } from 'talibjs';
 close = [your close price array];
 
 //For MACD with the default parameters
+
 output = TALib.macd(index, close, TALib.macdDefault.fastPeriod, TALib.macdDefault.slowPeriod, TALib.macdDefault.signalPeriod);
+
 let macd = output.macd;
+
 let signal = output.signal;
+
 let hist = output.hist;
+
  
 ## Function List:
 
