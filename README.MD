@@ -28,11 +28,11 @@ close = [your close price array];
 
 output = TALib.macd(index, close, TALib.macdDefault.fastPeriod, TALib.macdDefault.slowPeriod, TALib.macdDefault.signalPeriod);
 
-let macd = output.macd;
+let macd = output.get('macd');
 
-let signal = output.signal;
+let signal = output.get('signal');
 
-let hist = output.hist;
+let hist = output.get('hist');
 
  
 ## Function List:

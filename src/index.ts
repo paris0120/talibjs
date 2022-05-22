@@ -261,6 +261,7 @@ export class TALib {
         if (value.length != average.length) throw Error("Value and average must have the same length.");
         if (period <= 0) throw Error("Period must be a positive integer.");
         let std: (number | null)[] = [];
+        for(let i = 1; i<period; i++) std.push(null);
         for (let i = period - 1; i < average.length; i++) {
             if (average[i] == null) std.push(null)
             else {
