@@ -301,7 +301,7 @@ TYPPRICE: Typical Price
 
 ULTOSC              Ultimate Oscillator
 
-VAR                 Variance
+VAR: Variance
 
 WCLPRICE: Weighted Close Price
 

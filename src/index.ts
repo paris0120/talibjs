@@ -270,13 +270,44 @@ export class TALib {
                 for (let l = 0; l < period; l++) {
                     while (value[n] == null) n--;
                     // @ts-ignore
-                    sum += (value[n] - average[i]) ^ 2;
+                    sum += Math.pow((value[n] - average[i]), 2);
+                    n--;
+                }
+                std.push(Math.sqrt(sum / period));
+            }
+        }
+        return new Map([["stddev", std]]);
+    }
+
+
+    /**
+     * Variance
+     * @param value
+     * @param average
+     * @param period
+     */
+    public static var(value: (number | null)[] | undefined, average: (number | null)[] | undefined, period: number): Map<string, (number | null)[]> {
+        if (value == undefined) throw Error("Missing value.");
+        if (average == undefined) throw Error("Missing average.");
+        if (value.length != average.length) throw Error("Value and average must have the same length.");
+        if (period <= 0) throw Error("Period must be a positive integer.");
+        let std: (number | null)[] = [];
+        for(let i = 1; i<period; i++) std.push(null);
+        for (let i = period - 1; i < average.length; i++) {
+            if (average[i] == null) std.push(null)
+            else {
+                let n = i;
+                let sum = 0;
+                for (let l = 0; l < period; l++) {
+                    while (value[n] == null) n--;
+                    // @ts-ignore
+                    sum += Math.pow((value[n] - average[i]), 2);
                     n--;
                 }
                 std.push(sum / period);
             }
         }
-        return new Map([["stddev", std]]);
+        return new Map([["var", std]]);
     }
 
     public static macdDefault = new Map([["fastPeriod", 12],["slowPeriod", 26],["signalPeriod", 9]]);
