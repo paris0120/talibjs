@@ -455,7 +455,7 @@ export class TALib {
      * @param low
      * @param close
      */
-    public static tr(high: (number | null)[] | undefined, low: (number | null)[] | undefined, close: (number | null)[] | undefined): Map<string, (number | null)[]> {
+    public static tRange(high: (number | null)[] | undefined, low: (number | null)[] | undefined, close: (number | null)[] | undefined): Map<string, (number | null)[]> {
         if (high == undefined) throw Error("Missing high value.");
         if (low == undefined) throw Error("Missing low value.");
         if (close == undefined) throw Error("Missing close average.");
@@ -469,9 +469,9 @@ export class TALib {
                 // @ts-ignore
                 let max = high[i] - low[i];
                 // @ts-ignore
-                max = Math.abs(max, Math.abs(high[i] = close[i - 1]));
+                max = Math.max(max, Math.abs(high[i] - close[i - 1]));
                 // @ts-ignore
-                max = Math.abs(max, Math.abs(low[i] = close[i - 1]));
+                max = Math.max(max, Math.abs(low[i] - close[i - 1]));
                 tr.push(max);
             }
         }
@@ -488,7 +488,7 @@ export class TALib {
      * @param period
      */
     public static atr(high: (number | null)[] | undefined, low: (number | null)[] | undefined, close: (number | null)[] | undefined, period: number): Map<string, (number | null)[]> {
-        let tr = this.tr(high, low, close).get('tr');
+        let tr = this.tRange(high, low, close).get('tr');
         // @ts-ignore
         return new Map([["atr", this.sma(tr, period).get('sma')]]);
     }

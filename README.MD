@@ -1,5 +1,5 @@
 #TALib.js
-This library is a replication of TA-Lib with Typescript. This library will include with all functions from the original TA-Lib (https://www.ta-lib.org/function.html) and more. Compared with the other wrapped versions of TA-Lib, this library is implemented with pure Typescript, so it can be used at both front and back ends.
+This library is a replication of TA-Lib with Typescript. This library will include with all functions from the original TA-Lib (https://www.ta-lib.org/function.html) and more. Compared with the other wrapped versions of TA-Lib, this library is implemented with pure Typescript, so it can be used at both front and back ends. This library also corrects the calculation errors in the original TA-Lib (marked with *).
 
 ## Quick Guide
 
@@ -43,7 +43,7 @@ AD: Chaikin A/D Line
 
 ADOSC: Chaikin A/D 
 
-ADX: Average Directional Movement Index
+ADX*: Average Directional Movement Index
 
 ADXR: Average Directional Movement Index Rating
 
@@ -53,7 +53,7 @@ AROON               Aroon
 
 AROONOSC            Aroon Oscillator
 
-ATR: Average True Range
+ATR*: Average True Range
 
 AVGPRICE: Average Price
 
@@ -332,8 +332,6 @@ DI: Directional Index
 DM: Directional Movement
 
 MMA: Modified moving average
-
-TR: True Range 
 
 VWAP: Volume-Weighted Average Price
 
