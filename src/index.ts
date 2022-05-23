@@ -503,7 +503,7 @@ export class TALib {
     public static adOsc(high: (number | null)[] | undefined, low: (number | null)[] | undefined, close: (number | null)[] | undefined, volume: (number | null)[] | undefined, fastPeriod: number, slowPeriod: number): Map<string, (number | null)[]> {
         let ad = this.ad(high, low, close, volume).get("ad");
         // @ts-ignore
-        return new Map([["adOsc", this.ema(ad, fastPeriod).get("ema") - this.ema(ad, slowPeriod).get("ema")]]);
+        return new Map([["adOsc", this.minus(this.ema(ad, fastPeriod).get("ema") - this.ema(ad, slowPeriod).get("ema")).get('minus')]]);
     }
 
     public static adOscDefault = new Map([["fastPeriod", 3], ["slowPeriod", 10]]);
