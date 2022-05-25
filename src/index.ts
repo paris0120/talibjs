@@ -45,9 +45,10 @@ export class TALib {
                 // @ts-ignore
                 sum += value[i];
                 if (c >= period) {
-                    mma.push(sum / period);
+                    mma.push(sum/period);
                     // @ts-ignore
                     sum -= sum / period;
+
                 } else {
                     c++;
                     mma.push(null);
@@ -56,6 +57,9 @@ export class TALib {
         }
         return new Map([["mma", mma]]);
     }
+
+
+
 
 
     public static wsma(value: (number | null)[] | undefined, weight: (number | null)[] | undefined, period: number): Map<string, (number | null)[]> {
@@ -138,7 +142,9 @@ export class TALib {
     }
 
 
-    public static minus(value1: (number | null)[] | undefined, value2: (number | null)[] | undefined | number): Map<string, (number | null)[]> {
+
+
+    public static diff(value1: (number | null)[] | undefined, value2: (number | null)[] | undefined | number): Map<string, (number | null)[]> {
         if (value1 == undefined) throw Error("Missing value1.");
         if (value2 == undefined) throw Error("Missing value2.");
         let output: (number | null)[] = [];
@@ -159,6 +165,30 @@ export class TALib {
             }
         }
         return new Map([["minus", output]]);
+    }
+
+
+    public static minus(value1: (number | null)[] | undefined, value2: (number | null)[] | undefined | number): Map<string, (number | null)[]> {
+        if (value1 == undefined) throw Error("Missing value1.");
+        if (value2 == undefined) throw Error("Missing value2.");
+        let output: (number | null)[] = [];
+        if (typeof value2 == 'number') {
+            for (let i = 0; i < value1.length; i++) {
+                if (value1[i] == null) output.push(null);
+                else { // @ts-ignore
+                    output.push(value1[i] - value2);
+                }
+            }
+        } else {
+            if (value1.length != value2.length) throw Error("Two values have different lengths.");
+            for (let i = 0; i < value1.length; i++) {
+                if (value1[i] == null || value2[i] == null) output.push(null);
+                else { // @ts-ignore
+                    output.push(Math.abs(value1[i] - value2[i]));
+                }
+            }
+        }
+        return new Map([["diff", output]]);
     }
 
     public static plus(value1: (number | null)[] | undefined, value2: (number | null)[] | undefined | number): Map<string, (number | null)[]> {
@@ -238,7 +268,7 @@ export class TALib {
         let output: (number | null)[] = [];
         if (typeof value2 == 'number') {
             for (let i = 0; i < value1.length; i++) {
-                if (value1[i] == null) output.push(null);
+                if (value1[i] == null || value2 == 0) output.push(null);
                 else { // @ts-ignore
                     output.push(value1[i] / value2);
                 }
@@ -246,7 +276,7 @@ export class TALib {
         } else {
             if (value1.length != value2.length) throw Error("Two values have different lengths.");
             for (let i = 0; i < value1.length; i++) {
-                if (value1[i] == null || value2[i] == null) output.push(null);
+                if (value1[i] == null || value2[i] == null || value2[i] == 0) output.push(null);
                 else { // @ts-ignore
                     output.push(value1[i] / value2[i]);
                 }
@@ -550,21 +580,32 @@ export class TALib {
         if (high.length != low.length) throw Error("High and low must have the same length.");
         let pdm: (number | null)[] = [];
         let ndm: (number | null)[] = [];
+        let lastHigh = null;
+        let lastLow = null;
         pdm.push(null);
         ndm.push(null);
         for (let i = 1; i < high.length; i++) {
             if (high[i] == null || low[i] == null || high[i - 1] == null || low[i - 1] == null) {
                 pdm.push(null);
                 ndm.push(null);
-            } else {
-                // @ts-ignore
-                let up = high[i] - high[i - 1];
-                // @ts-ignore
-                let down = low[i - 1] - low[i];
-                if (up > down && up > 0) pdm.push(up)
-                else pdm.push(0);
-                if (down > up && down > 0) ndm.push(down)
-                else ndm.push(0);
+            }
+            else {
+                if(lastHigh==null) {
+                    pdm.push(null);
+                    ndm.push(null);
+                }
+                else {
+                    // @ts-ignore
+                    let up = high[i] - lastHigh;
+                    // @ts-ignore
+                    let down = lastLow - low[i];
+                    if (up > down && up > 0) pdm.push(up)
+                    else pdm.push(0);
+                    if (down > up && down > 0) ndm.push(down)
+                    else ndm.push(0);
+                }
+                lastHigh = high[i];
+                lastLow = low[i];
             }
         }
         return new Map([["pdm", pdm], ["ndm", ndm]]);
@@ -619,9 +660,12 @@ export class TALib {
         // @ts-ignore
         for (let i = 0; i < high.length; i++) {
             if (pdi[i] == null) dx.push(null);
-            else {
-                // @ts-ignore
-                dx.push((pdi[i] - ndi[i]) / (pdi[i] + ndi[i]));
+            else { // @ts-ignore
+                if((pdi[i] + ndi[i])==0) dx.push(null)
+                else {
+                    // @ts-ignore
+                    dx.push(100*(pdi[i] - ndi[i]) / (pdi[i] + ndi[i]));
+                }
             }
         }
         return new Map([["dx", dx]]);
@@ -637,8 +681,9 @@ export class TALib {
      */
     public static adx(high: (number | null)[] | undefined, low: (number | null)[] | undefined, close: (number | null)[] | undefined, period: number): Map<string, (number | null)[]> {
         let dx = this.dx(high, low, close, period).get('dx');
+        let adx = this.mma(dx, period).get('mma');
         // @ts-ignore
-        return new Map([["adx", this.mma(dx, period).get('mma')]]);
+        return new Map([["adx", adx]]);
     }
     public static adxDefault = new Map([["period", 14]]);
 
@@ -707,6 +752,9 @@ export class TALib {
     }
 
     public static apoDefault = new Map([["fastPeriod", 12],["slowPeriod", 26],["signalPeriod", 9]]);
+
+
+
 
     /**
      * Highest value over a specified period
